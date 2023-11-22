@@ -1,9 +1,10 @@
 package com.example.educationspringapp;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * @author saxDev
@@ -42,8 +43,7 @@ public class StudentController {
     }
 
     @GetMapping(path = "/view")
-    public @ResponseBody Student getStudentById(@RequestParam Integer id) {
-        return studentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Student not found with id of: " + id));
+    public @ResponseBody Optional<Student> getStudentById(@RequestParam Integer id) {
+        return studentRepository.findById(id);
     }
 }
