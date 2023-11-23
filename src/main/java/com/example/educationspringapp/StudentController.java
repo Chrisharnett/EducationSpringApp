@@ -18,22 +18,8 @@ public class StudentController {
     private StudentRepository studentRepository;
 
     @PostMapping(path="/add")
-    public @ResponseBody String addNewStudent (@RequestParam String firstName,
-                                               @RequestParam String lastName,
-                                               @RequestParam String email,
-                                               @RequestParam String address,
-                                               @RequestParam String city,
-                                               @RequestParam String postal,
-                                               @RequestParam String phone) {
-        Student s = new Student();
-        s.setFirstName(firstName);
-        s.setLastName(lastName);
-        s.setEmail(email);
-        s.setAddress(address);
-        s.setCity(city);
-        s.setPostal(postal);
-        s.setPhone(phone);
-        studentRepository.save(s);
+    public @ResponseBody String addNewStudent (@RequestBody Student student) {
+        studentRepository.save(student);
         return "Saved";
     }
 
