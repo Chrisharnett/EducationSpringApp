@@ -12,7 +12,7 @@ import java.util.Optional;
  **/
 
 @Controller
-@RequestMapping(path="/student")
+@RequestMapping(path="/api/cna/student")
 public class StudentController {
     @Autowired
     private StudentRepository studentRepository;

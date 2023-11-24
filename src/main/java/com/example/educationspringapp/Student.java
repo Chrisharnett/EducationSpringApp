@@ -14,7 +14,7 @@ import jakarta.persistence.Id;
 public class Student {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private Integer studentId;
     private String firstName;
     private String lastName;
     private String email;
@@ -23,12 +23,12 @@ public class Student {
     private String postal;
     private String phone;
 
-    public Integer getId() {
-        return id;
+    public Integer getStudentId() {
+        return studentId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setStudentId(Integer id) {
+        this.studentId = id;
     }
 
     public String getFirstName() {

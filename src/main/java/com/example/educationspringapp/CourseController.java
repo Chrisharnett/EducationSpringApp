@@ -12,7 +12,7 @@ import java.util.Optional;
  **/
 
 @Controller
-@RequestMapping(path="/course")
+@RequestMapping(path="/api/cna/course")
 public class CourseController {
     @Autowired
     private CourseRepository courseRepository;
