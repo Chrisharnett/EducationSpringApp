@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.*;
 import java.util.Optional;
 
 /**
@@ -32,4 +33,17 @@ public class CourseController {
     public @ResponseBody Optional<Course> getCourseById(@RequestParam Integer id) {
         return courseRepository.findById(id);
     }
+
+    @PutMapping(path="/modify")
+    public @ResponseBody String modifyCourse(@RequestBody Course course){
+        courseRepository.save(course);
+        return "Updated";
+    }
+
+    @DeleteMapping(path="/delete/{id}")
+    public @ResponseBody String deleteCourse(@PathVariable Integer id){
+        courseRepository.deleteById(id);
+        return "Deleted";
+    }
+
 }
