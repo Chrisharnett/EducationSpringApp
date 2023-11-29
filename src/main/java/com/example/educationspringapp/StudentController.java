@@ -20,7 +20,13 @@ public class StudentController {
     @PostMapping(path="/add")
     public @ResponseBody String addNewStudent (@RequestBody Student student) {
         studentRepository.save(student);
-        return "Student Saved";
+        Optional<Student> addedStudent = studentRepository.findById(student.getStudentId());
+        if (addedStudent.isPresent()){
+            return String.format("Student %d Saved", student.getStudentId());
+        } else{
+            return String.format("Error adding %s %s", student.getFirstName(), student.getLastName());
+        }
+
     }
 
     @GetMapping(path="/list")
@@ -41,7 +47,13 @@ public class StudentController {
 
     @DeleteMapping(path="/delete/{id}")
     public @ResponseBody String deleteStudent(@PathVariable Integer id){
-        studentRepository.deleteById(id);
-        return "Student Deleted";
+        Optional<Student> studentToDelete = studentRepository.findById(id);
+        if (studentToDelete.isEmpty()){
+            return String.format("Student %d not found", id);
+        } else {
+            studentRepository.deleteById(id);
+            return String.format("Student %d Deleted", id);
+        }
+
     }
 }
