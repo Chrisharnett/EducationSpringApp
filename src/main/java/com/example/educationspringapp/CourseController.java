@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
 import java.util.Optional;
 
 /**
@@ -13,7 +12,7 @@ import java.util.Optional;
  **/
 
 @Controller
-@RequestMapping(path="/api/cna/course")
+@RequestMapping(path="/course")
 public class CourseController {
     @Autowired
     private CourseRepository courseRepository;
@@ -21,7 +20,7 @@ public class CourseController {
     @PostMapping(path="/add")
     public @ResponseBody String addNewCourse (@RequestBody Course course) {
         courseRepository.save(course);
-        return "Saved";
+        return "Course Saved";
     }
 
     @GetMapping(path="/list")
@@ -37,13 +36,12 @@ public class CourseController {
     @PutMapping(path="/modify")
     public @ResponseBody String modifyCourse(@RequestBody Course course){
         courseRepository.save(course);
-        return "Updated";
+        return "Course Updated";
     }
 
     @DeleteMapping(path="/delete/{id}")
     public @ResponseBody String deleteCourse(@PathVariable Integer id){
         courseRepository.deleteById(id);
-        return "Deleted";
+        return "Course Deleted";
     }
-
 }

@@ -12,7 +12,7 @@ import java.util.Optional;
  **/
 
 @Controller
-@RequestMapping(path="/api/cna/student")
+@RequestMapping(path="/student")
 public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
@@ -20,7 +20,7 @@ public class StudentController {
     @PostMapping(path="/add")
     public @ResponseBody String addNewStudent (@RequestBody Student student) {
         studentRepository.save(student);
-        return "Saved";
+        return "Student Saved";
     }
 
     @GetMapping(path="/list")
@@ -31,5 +31,17 @@ public class StudentController {
     @GetMapping(path = "/view")
     public @ResponseBody Optional<Student> getStudentById(@RequestParam Integer id) {
         return studentRepository.findById(id);
+    }
+
+    @PutMapping(path="/modify")
+    public @ResponseBody String modifyStudent(@RequestBody Student student){
+        studentRepository.save(student);
+        return "Student Updated";
+    }
+
+    @DeleteMapping(path="/delete/{id}")
+    public @ResponseBody String deleteStudent(@PathVariable Integer id){
+        studentRepository.deleteById(id);
+        return "Student Deleted";
     }
 }
