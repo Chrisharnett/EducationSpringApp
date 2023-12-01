@@ -20,7 +20,7 @@ public class CourseController {
     @PostMapping(path="/add")
     public @ResponseBody String addNewCourse (@RequestBody Course course) {
         courseRepository.save(course);
-        return "Course Saved";
+        return String.format("%s saved.", course.getCourseName());
     }
 
     @GetMapping(path="/list")
@@ -28,20 +28,32 @@ public class CourseController {
         return courseRepository.findAll();
     }
 
-    @GetMapping(path = "/view")
-    public @ResponseBody Optional<Course> getCourseById(@RequestParam Integer id) {
+    @GetMapping(path = "/view/{id}")
+    public @ResponseBody Optional<Course> getCourseById(@PathVariable Integer id) {
         return courseRepository.findById(id);
     }
 
     @PutMapping(path="/modify")
     public @ResponseBody String modifyCourse(@RequestBody Course course){
-        courseRepository.save(course);
-        return "Course Updated";
+        Optional<Course> courseToModify = courseRepository.findById(course.getCourseID());
+        if (courseToModify.isPresent()) {
+            courseRepository.save(course);
+            return String.format("Course %d updated", course.getCourseID());
+        }
+        else{
+            return String.format("Course %s not found.", course.getCourseID());
+        }
     }
 
     @DeleteMapping(path="/delete/{id}")
     public @ResponseBody String deleteCourse(@PathVariable Integer id){
-        courseRepository.deleteById(id);
-        return "Course Deleted";
+        Optional<Course> courseToDelete = courseRepository.findById(id);
+        if(courseToDelete.isEmpty()){
+            return String.format("Course %d not found.", id);
+        } else{
+            courseRepository.deleteById(id);
+            return String.format("Course %d deleted", id);
+        }
+
     }
 }

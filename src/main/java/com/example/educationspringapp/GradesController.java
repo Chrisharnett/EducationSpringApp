@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author saxDev
@@ -45,13 +46,24 @@ public class GradesController {
 
     @PutMapping(path="/modify")
     public @ResponseBody String modifyGrades(@RequestBody Grades grades){
-        gradesRepository.save(grades);
-        return "Grades Updated";
+        Optional<Grades> gradesToModify = gradesRepository.findById(grades.getStudentId());
+        if (gradesToModify.isPresent()) {
+            gradesRepository.save(grades);
+            return String.format("Grades %d updated", grades.getGid());
+        }
+        else{
+            return String.format("Student %s not found.", grades.getGid());
+        }
     }
 
     @DeleteMapping(path="/delete/{id}")
-    public @ResponseBody String deleteCourse(@PathVariable Integer id){
-        gradesRepository.deleteById(id);
-        return "Grades Deleted";
+    public @ResponseBody String deleteGrades(@PathVariable Integer id){
+        Optional<Grades> gradesToDelete = gradesRepository.findById(id);
+        if(gradesToDelete.isEmpty()){
+            return String.format("Grades %d not found.", id);
+        } else{
+            gradesRepository.deleteById(id);
+            return String.format("Grades %d deleted", id);
+        }
     }
 }

@@ -20,7 +20,7 @@ public class ProgramsController {
     @PostMapping(path="/add")
     public @ResponseBody String addNewPrograms (@RequestBody Programs programs) {
         programsRepository.save(programs);
-        return "Program Saved";
+        return String.format("%s saved.", programs.getProgramName());
     }
 
     @GetMapping(path="/list")
@@ -28,21 +28,33 @@ public class ProgramsController {
         return programsRepository.findAll();
     }
 
-    @GetMapping(path = "/view")
-    public @ResponseBody Optional<Programs> getProgramsById(@RequestParam Integer id) {
+    @GetMapping(path = "/view/{id}")
+    public @ResponseBody Optional<Programs> getProgramsById(@PathVariable Integer id) {
         return programsRepository.findById(id);
     }
 
     @PutMapping(path="/modify")
     public @ResponseBody String modifyPrograms(@RequestBody Programs programs){
-        programsRepository.save(programs);
-        return "Programs Updated";
+        Optional<Programs> programToModify = programsRepository.findById(programs.getPid());
+        if (programToModify.isPresent()) {
+            programsRepository.save(programs);
+            return String.format("Program %d updated", programs.getPid());
+        }
+        else{
+            return String.format("Program %s not found.", programs.getPid());
+        }
     }
 
     @DeleteMapping(path="/delete/{id}")
     public @ResponseBody String deletePrograms(@PathVariable Integer id){
-        programsRepository.deleteById(id);
-        return "Programs Deleted";
+        Optional<Programs> programsToDelete = programsRepository.findById(id);
+        if(programsToDelete.isEmpty()){
+            return String.format("Program %d not found.", id);
+        } else {
+            programsRepository.deleteById(id);
+            return String.format("Program %d deleted", id);
+        }
+
     }
 
 }

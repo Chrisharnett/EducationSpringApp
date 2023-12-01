@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author saxDev
@@ -43,13 +44,24 @@ public class EnrollmentController {
 
     @PutMapping(path="/modify")
     public @ResponseBody String modifyEnrollment(@RequestBody Enrollment enrollment){
-        enrollmentRepository.save(enrollment);
-        return "Enrollment Updated";
+        Optional<Enrollment> enrollmentToModify = enrollmentRepository.findById(enrollment.getEid());
+        if (enrollmentToModify.isPresent()) {
+            enrollmentRepository.save(enrollment);
+            return String.format("Enrollment %d updated", enrollment.getEid());
+        }
+        else{
+            return String.format("Enrollment %s not found.", enrollment.getEid());
+        }
     }
 
     @DeleteMapping(path="/delete/{id}")
     public @ResponseBody String deleteEnrollment(@PathVariable Integer id){
-        enrollmentRepository.deleteById(id);
-        return "Enrollment Deleted";
+        Optional<Enrollment> enrollmentToModify = enrollmentRepository.findById(id);
+        if(enrollmentToModify.isEmpty()){
+            return String.format("Enrollment %d not found.", id);
+        } else{
+            enrollmentRepository.deleteById(id);
+            return String.format("Enrollment %d deleted", id);
+        }
     }
 }
