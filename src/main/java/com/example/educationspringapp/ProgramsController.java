@@ -3,7 +3,6 @@ package com.example.educationspringapp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 /**
@@ -18,9 +17,8 @@ public class ProgramsController {
     private ProgramsRepository programsRepository;
 
     @PostMapping(path="/add")
-    public @ResponseBody String addNewPrograms (@RequestBody Programs programs) {
-        programsRepository.save(programs);
-        return String.format("%s saved.", programs.getProgramName());
+    public @ResponseBody Programs addNewPrograms (@RequestBody Programs programs) {
+        return programsRepository.save(programs);
     }
 
     @GetMapping(path="/list")
@@ -34,27 +32,12 @@ public class ProgramsController {
     }
 
     @PutMapping(path="/modify")
-    public @ResponseBody String modifyPrograms(@RequestBody Programs programs){
-        Optional<Programs> programToModify = programsRepository.findById(programs.getPid());
-        if (programToModify.isPresent()) {
-            programsRepository.save(programs);
-            return String.format("Program %d updated", programs.getPid());
-        }
-        else{
-            return String.format("Program %s not found.", programs.getPid());
-        }
+    public @ResponseBody Programs modifyPrograms(@RequestBody Programs programs){
+        return programsRepository.save(programs);
     }
 
     @DeleteMapping(path="/delete/{id}")
-    public @ResponseBody String deletePrograms(@PathVariable Integer id){
-        Optional<Programs> programsToDelete = programsRepository.findById(id);
-        if(programsToDelete.isEmpty()){
-            return String.format("Program %d not found.", id);
-        } else {
-            programsRepository.deleteById(id);
-            return String.format("Program %d deleted", id);
-        }
-
+    public @ResponseBody void deletePrograms(@PathVariable Integer id){
+        programsRepository.deleteById(id);
     }
-
 }

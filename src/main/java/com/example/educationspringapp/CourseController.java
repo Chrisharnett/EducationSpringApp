@@ -3,7 +3,6 @@ package com.example.educationspringapp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Optional;
 
 /**
@@ -18,9 +17,8 @@ public class CourseController {
     private CourseRepository courseRepository;
 
     @PostMapping(path="/add")
-    public @ResponseBody String addNewCourse (@RequestBody Course course) {
-        courseRepository.save(course);
-        return String.format("%s saved.", course.getCourseName());
+    public @ResponseBody Course addNewCourse (@RequestBody Course course) {
+        return courseRepository.save(course);
     }
 
     @GetMapping(path="/list")
@@ -34,26 +32,12 @@ public class CourseController {
     }
 
     @PutMapping(path="/modify")
-    public @ResponseBody String modifyCourse(@RequestBody Course course){
-        Optional<Course> courseToModify = courseRepository.findById(course.getCourseID());
-        if (courseToModify.isPresent()) {
-            courseRepository.save(course);
-            return String.format("Course %d updated", course.getCourseID());
-        }
-        else{
-            return String.format("Course %s not found.", course.getCourseID());
-        }
+    public @ResponseBody Course modifyCourse(@RequestBody Course course){
+        return courseRepository.save(course);
     }
 
     @DeleteMapping(path="/delete/{id}")
-    public @ResponseBody String deleteCourse(@PathVariable Integer id){
-        Optional<Course> courseToDelete = courseRepository.findById(id);
-        if(courseToDelete.isEmpty()){
-            return String.format("Course %d not found.", id);
-        } else{
-            courseRepository.deleteById(id);
-            return String.format("Course %d deleted", id);
-        }
-
+    public @ResponseBody void deleteCourse(@PathVariable Integer id){
+        courseRepository.deleteById(id);
     }
 }
